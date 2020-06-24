@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Button, TextInput } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TextInput,
+  ScrollView,
+  FlatList,
+} from "react-native";
 
 export default function App() {
   const [enteredGoal, setenteredGoal] = useState("");
@@ -9,7 +17,10 @@ export default function App() {
     setenteredGoal(enteredText);
   };
   const addGoalHandler = () => {
-    setCourseGoals((currentGoals) => [...courseGoals, enteredGoal]);
+    setCourseGoals((currentGoals) => [
+      ...courseGoals,
+      { id: Math.random().toString(), value: enteredGoal },
+    ]);
   };
   return (
     <View style={styles.container}>
@@ -23,13 +34,15 @@ export default function App() {
         />
         <Button title="ADD" onPress={addGoalHandler} />
       </View>
-      <View>
-        {courseGoals.map((goal) => (
+      <FlatList
+        keyExtractor={(item, index) => item.id}
+        data={courseGoals}
+        renderItem={(item) => (
           <View style={styles.listItem}>
-            <Text key={goal}>{goal}</Text>
+            <Text>{item.item.value}</Text>
           </View>
-        ))}
-      </View>
+        )}
+      />
     </View>
   );
 }
